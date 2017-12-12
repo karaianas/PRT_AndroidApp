@@ -1,0 +1,13 @@
+uniform mat4 u_matrix;
+
+attribute vec4 a_position;
+
+varying vec3 texCoord;
+
+void main()
+{
+
+    vec4 pos = u_matrix * a_position;
+    gl_Position = pos;
+    texCoord = vec3(a_position);
+}
