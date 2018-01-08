@@ -37,7 +37,6 @@ public class Skybox {
 //    int normalIdx;
     int skyboxIdx;
 
-
     public Skybox(Context context)
     {
         mContext = context;
@@ -90,6 +89,11 @@ public class Skybox {
 //        normalIdx = buffers[1];
 
         skyboxIdx = loadTextures();
+    }
+
+    public void rotate(int axis, float angle)
+    {
+
     }
 
     public void draw(float[] M, float[] V, float[] P)

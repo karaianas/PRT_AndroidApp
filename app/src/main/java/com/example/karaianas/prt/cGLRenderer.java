@@ -29,6 +29,7 @@ public class cGLRenderer extends GvrActivity implements GvrView.StereoRenderer{
     private float[] MV_skybox = new float[16];
     private float[] VP = new float[16];
     private float[] MVP_skybox = new float[16];
+    private float[] R = new float[16];
 
     private float [] headRotation = new float[4];
     private float [] headView = new float[16];
@@ -37,6 +38,7 @@ public class cGLRenderer extends GvrActivity implements GvrView.StereoRenderer{
     private static final float Z_NEAR = 0.1f;
     private static final float Z_FAR = 1000.0f;
     private static final float CAMERA_Z = 0.01f;//0.01f
+    public volatile float rangle;
 
     public cGLRenderer(Context context)
     {
@@ -58,6 +60,7 @@ public class cGLRenderer extends GvrActivity implements GvrView.StereoRenderer{
 
         GLES20.glDepthFunc(GLES20.GL_LEQUAL);
         mSkybox = new Skybox(mContext);
+        rangle = 0;
 
     }
 
@@ -87,6 +90,11 @@ public class cGLRenderer extends GvrActivity implements GvrView.StereoRenderer{
 //        Matrix.multiplyMM(VP, 0, perspective, 0, V, 0);
 
         mSkybox.draw(M_skybox, V, perspective);
+
+        // Rotating the skybox on XY-plane
+        rangle = 0.2f;
+        Matrix.setRotateM(R, 0, rangle, 0.0f, 1.0f, 0.0f);
+        Matrix.multiplyMM(M_skybox, 0, R, 0, M_skybox, 0);
     }
 
     @Override
