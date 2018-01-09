@@ -54,6 +54,8 @@ public class Obj {
     float [] L22 = {0.21f, -0.05f, -0.30f};
 
     int fcounter = 0;
+    int vcounter = 0;
+    int ccounter = 0;
 
     public Obj(Context context)
     {
@@ -172,9 +174,10 @@ public class Obj {
         colorsBuffer = buffer2.asFloatBuffer();
 
         // Create buffer for indices
-        ByteBuffer buffer3 = ByteBuffer.allocateDirect(facesList.size() * 3 * 2);
-        buffer3.order(ByteOrder.nativeOrder());
-        facesBuffer = buffer3.asShortBuffer();
+//        ByteBuffer buffer3 = ByteBuffer.allocateDirect(facesList.size() * 3 * 2);
+//        buffer3.order(ByteOrder.nativeOrder());
+//        facesBuffer = buffer3.asShortBuffer();
+
 
         for (String vertex : verticesList) {
             String coords[] = vertex.split(" ");
@@ -188,9 +191,12 @@ public class Obj {
             verticesBuffer.put(x);
             verticesBuffer.put(y);
             verticesBuffer.put(z);
+
+            vcounter++;
         }
         verticesBuffer.position(0);
 
+        int counter = 0;
         for (String color : colorsList) {
             String coords[] = color.split(" ");
 
@@ -198,29 +204,30 @@ public class Obj {
             float y = Float.parseFloat(coords[1]);
             float z = Float.parseFloat(coords[2]);
 
-            //Log.d("WTH", ":" + x + " " + y + " " + z);
+            //Log.d("WTH", ccounter + ":" + x + " " + y + " " + z);
 
             colorsBuffer.put(x);
             colorsBuffer.put(y);
             colorsBuffer.put(z);
 
+            ccounter++;
         }
         colorsBuffer.position(0);
 
-        for (String face : facesList) {
-            String vertexIndices[] = face.split(" ");
-
-            short vertex1 = Short.parseShort(vertexIndices[0]);//(short)(Short.parseShort(vertexIndices[0]) + 1);
-            short vertex2 = Short.parseShort(vertexIndices[1]);//(short)(Short.parseShort(vertexIndices[1]) + 1);
-            short vertex3 = Short.parseShort(vertexIndices[2]);//(short)(Short.parseShort(vertexIndices[2]) + 1);
-
-            facesBuffer.put((short) vertex1);
-            facesBuffer.put((short) vertex2);
-            facesBuffer.put((short) vertex3);
-            //Log.d("WTH", ":" + vertex1 + " " + vertex2 + " " + vertex3);
-            fcounter++;
-        }
-        facesBuffer.position(0);
+//        for (String face : facesList) {
+//            String vertexIndices[] = face.split(" ");
+//
+//            short vertex1 = Short.parseShort(vertexIndices[0]);//(short)(Short.parseShort(vertexIndices[0]) + 1);
+//            short vertex2 = Short.parseShort(vertexIndices[1]);//(short)(Short.parseShort(vertexIndices[1]) + 1);
+//            short vertex3 = Short.parseShort(vertexIndices[2]);//(short)(Short.parseShort(vertexIndices[2]) + 1);
+//
+//            facesBuffer.put((short) vertex1);
+//            facesBuffer.put((short) vertex2);
+//            facesBuffer.put((short) vertex3);
+//            //Log.d("WTH", ":" + vertex1 + " " + vertex2 + " " + vertex3);
+//            fcounter++;
+//        }
+//        facesBuffer.position(0);
 
         setupShader();
     }
@@ -264,7 +271,7 @@ public class Obj {
 
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, buffers[1]);
         GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, colorsBuffer.capacity() * 4, colorsBuffer, GLES20.GL_STATIC_DRAW);
-
+//
 //        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, buffers[2]);
 //        GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, facesBuffer.capacity() * 2, facesBuffer, GLES20.GL_STATIC_DRAW);
 
@@ -294,23 +301,23 @@ public class Obj {
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, colorIdx);
         GLES20.glEnableVertexAttribArray(mColorHandle);
         GLES20.glVertexAttribPointer(mColorHandle, 3, GLES20.GL_FLOAT, false, 0, 0);
-        //GLES20.glDisableVertexAttribArray(colorAttribute);
+//        //GLES20.glDisableVertexAttribArray(colorAttribute);
 
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
 
         // Pass MVP matrix
         float [] temp = new float[16];
         Matrix.multiplyMM(temp, 0, V, 0, M, 0);
-        //GLES20.glUniformMatrix4fv(mMVHandle, 1, false, temp, 0);
         Matrix.multiplyMM(temp, 0, P, 0, temp, 0);
         GLES20.glUniformMatrix4fv(mMVPHandle, 1, false, temp, 0);
 
         // Draw
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
-        //
-        GLES20.glDrawElements(GLES20.GL_TRIANGLES, facesList.size()* 3 , GLES20.GL_UNSIGNED_SHORT, facesBuffer);
-        Log.d("STRANGE", verticesList.size() + " " + colorsList.size() + " " + facesList.size());
-        //GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, fcounter);
+        //GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, facesIdx);
+        //GLES20.glDrawElements(GLES20.GL_TRIANGLES, facesList.size() * 3, GLES20.GL_UNSIGNED_SHORT, facesBuffer);
+        Log.d("ST", verticesList.size() + " " + colorsList.size() + " " + facesList.size());
+        Log.d("TT", vcounter + " " + ccounter + " " + fcounter);
+        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, fcounter);
 //
         //GLES20.glDisableVertexAttribArray(position);
 
