@@ -39,7 +39,7 @@ public class cGLRenderer extends GvrActivity implements GvrView.StereoRenderer{
     // Settings
     private static final float Z_NEAR = 0.1f;
     private static final float Z_FAR = 1000.0f;
-    private static final float CAMERA_Z = 2.0f;
+    private static final float CAMERA_Z = 5.0f;
     public volatile float rangle;
 
     public cGLRenderer(Context context)

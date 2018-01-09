@@ -174,9 +174,9 @@ public class Obj {
         colorsBuffer = buffer2.asFloatBuffer();
 
         // Create buffer for indices
-//        ByteBuffer buffer3 = ByteBuffer.allocateDirect(facesList.size() * 3 * 2);
-//        buffer3.order(ByteOrder.nativeOrder());
-//        facesBuffer = buffer3.asShortBuffer();
+        ByteBuffer buffer3 = ByteBuffer.allocateDirect(facesList.size() * 3 * 2);
+        buffer3.order(ByteOrder.nativeOrder());
+        facesBuffer = buffer3.asShortBuffer();
 
 
         for (String vertex : verticesList) {
@@ -214,20 +214,20 @@ public class Obj {
         }
         colorsBuffer.position(0);
 
-//        for (String face : facesList) {
-//            String vertexIndices[] = face.split(" ");
-//
-//            short vertex1 = Short.parseShort(vertexIndices[0]);//(short)(Short.parseShort(vertexIndices[0]) + 1);
-//            short vertex2 = Short.parseShort(vertexIndices[1]);//(short)(Short.parseShort(vertexIndices[1]) + 1);
-//            short vertex3 = Short.parseShort(vertexIndices[2]);//(short)(Short.parseShort(vertexIndices[2]) + 1);
-//
-//            facesBuffer.put((short) vertex1);
-//            facesBuffer.put((short) vertex2);
-//            facesBuffer.put((short) vertex3);
-//            //Log.d("WTH", ":" + vertex1 + " " + vertex2 + " " + vertex3);
-//            fcounter++;
-//        }
-//        facesBuffer.position(0);
+        for (String face : facesList) {
+            String vertexIndices[] = face.split(" ");
+
+            short vertex1 = Short.parseShort(vertexIndices[0]);//(short)(Short.parseShort(vertexIndices[0]) + 1);
+            short vertex2 = Short.parseShort(vertexIndices[1]);//(short)(Short.parseShort(vertexIndices[1]) + 1);
+            short vertex3 = Short.parseShort(vertexIndices[2]);//(short)(Short.parseShort(vertexIndices[2]) + 1);
+
+            facesBuffer.put((short) vertex1);
+            facesBuffer.put((short) vertex2);
+            facesBuffer.put((short) vertex3);
+            //Log.d("WTH", ":" + vertex1 + " " + vertex2 + " " + vertex3);
+            fcounter++;
+        }
+        facesBuffer.position(0);
 
         setupShader();
     }
@@ -314,11 +314,10 @@ public class Obj {
         // Draw
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
         //GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, facesIdx);
-        //GLES20.glDrawElements(GLES20.GL_TRIANGLES, facesList.size() * 3, GLES20.GL_UNSIGNED_SHORT, facesBuffer);
-        Log.d("ST", verticesList.size() + " " + colorsList.size() + " " + facesList.size());
+        GLES20.glDrawElements(GLES20.GL_TRIANGLES, facesList.size() * 3, GLES20.GL_UNSIGNED_SHORT, facesBuffer);
+        //Log.d("ST", verticesList.size() + " " + colorsList.size() + " " + facesList.size());
         Log.d("TT", vcounter + " " + ccounter + " " + fcounter);
-        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, fcounter);
-//
+       // GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, fcounter * 3);
         //GLES20.glDisableVertexAttribArray(position);
 
     }
