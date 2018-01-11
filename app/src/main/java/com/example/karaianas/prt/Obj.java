@@ -191,6 +191,9 @@ public class Obj {
             verticesBuffer.put(x);
             verticesBuffer.put(y);
             verticesBuffer.put(z);
+//            verticesBuffer.put(x);
+//            verticesBuffer.put(z);
+//            verticesBuffer.put(y);
 
             vcounter++;
         }
