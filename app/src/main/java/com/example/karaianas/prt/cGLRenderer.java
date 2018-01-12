@@ -52,6 +52,7 @@ public class cGLRenderer extends GvrActivity implements GvrView.StereoRenderer{
         Matrix.setIdentityM(M_skybox, 0);
         Matrix.scaleM(M_skybox, 0, 10, 10, 10);
         Matrix.setIdentityM(M_object, 0);
+        Matrix.translateM(M_object, 0, 0, -2.0f, 0);
         //Matrix.rotateM(M_object, 0, 90, 1, 0, 0);
         //Matrix.scaleM(M_object, 0, 2, 2, 2);
     }
@@ -74,7 +75,8 @@ public class cGLRenderer extends GvrActivity implements GvrView.StereoRenderer{
     public void onNewFrame(HeadTransform headTransform)
     {
         // Build the camera matrix and apply it to the ModelView.
-        Matrix.setLookAtM(C, 0, 0.0f, 0.0f, CAMERA_Z, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+        float eye_y = 0.0f;
+        Matrix.setLookAtM(C, 0, 0.0f, eye_y, CAMERA_Z, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
 
         headTransform.getHeadView(headView, 0);
         headTransform.getQuaternion(headRotation, 0);
@@ -99,10 +101,10 @@ public class cGLRenderer extends GvrActivity implements GvrView.StereoRenderer{
         mObj.draw(M_object, V, perspective);
 
         // Rotating the skybox on XY-plane
-        rangle = 0.2f;
-        Matrix.setRotateM(R, 0, rangle, 0.0f, 1.0f, 0.0f);
-        Matrix.multiplyMM(M_skybox, 0, R, 0, M_skybox, 0);
-        Matrix.multiplyMM(M_object, 0, R, 0, M_object, 0);
+//        rangle = 0.2f;
+//        Matrix.setRotateM(R, 0, rangle, 0.0f, 1.0f, 0.0f);
+//        Matrix.multiplyMM(M_skybox, 0, R, 0, M_skybox, 0);
+//        Matrix.multiplyMM(M_object, 0, R, 0, M_object, 0);
     }
 
     @Override

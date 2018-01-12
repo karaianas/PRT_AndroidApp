@@ -62,7 +62,7 @@ public class Obj {
         mContext = context;
 
         // Read in positions
-        InputStream is_pos = mContext.getResources().openRawResource(R.raw.model01);
+        InputStream is_pos = mContext.getResources().openRawResource(R.raw.model02);
         Scanner scanner = new Scanner(is_pos);
 
         // Loop through all its lines
@@ -104,7 +104,7 @@ public class Obj {
         scanner.close();
 
         // Read in colors
-        InputStream is_color = mContext.getResources().openRawResource(R.raw.model01_coefficients);
+        InputStream is_color = mContext.getResources().openRawResource(R.raw.model02_coefficients);
         scanner = new Scanner(is_color);
 
         while (scanner.hasNextLine())
@@ -139,13 +139,16 @@ public class Obj {
                     Float.parseFloat(v4) *L11[2] + Float.parseFloat(v5) *L2_2[2] + Float.parseFloat(v6) *L2_1[2] +
                     Float.parseFloat(v7) *L20[2] + Float.parseFloat(v8) *L21[2] + Float.parseFloat(v9) *L22[2]);
 
+//            float val_r = 1.0f;
+//            float val_g = 1.0f;
+//            float val_b = 1.0f;
 
             colorsList.add(Float.toString(val_r) + " " + Float.toString(val_g) + " " + Float.toString(val_b));
         }
         scanner.close();
 
         // Read in indices
-        InputStream is_ind = mContext.getResources().openRawResource(R.raw.model01_order);
+        InputStream is_ind = mContext.getResources().openRawResource(R.raw.model02_order);
         scanner = new Scanner(is_ind);
 
         while (scanner.hasNextLine())
@@ -287,6 +290,9 @@ public class Obj {
 
     public void draw(float[] M, float[] V, float[] P)
     {
+        GLES20.glEnable(GLES20.GL_CULL_FACE);
+        GLES20.glCullFace(GLES20.GL_BACK);
+
         GLES20.glUseProgram(program);
 
         mPosHandle = GLES20.glGetAttribLocation(program, "a_position");

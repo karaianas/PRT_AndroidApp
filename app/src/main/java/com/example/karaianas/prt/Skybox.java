@@ -98,6 +98,9 @@ public class Skybox {
 
     public void draw(float[] M, float[] V, float[] P)
     {
+        GLES20.glEnable(GLES20.GL_CULL_FACE);
+        GLES20.glCullFace(GLES20.GL_FRONT);
+
         GLES20.glUseProgram(program);
 
         mMHandle = GLES20.glGetUniformLocation(program, "u_matrix");
