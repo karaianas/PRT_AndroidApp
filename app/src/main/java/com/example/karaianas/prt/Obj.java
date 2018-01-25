@@ -325,7 +325,7 @@ public class Obj {
         //GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, facesIdx);
         GLES20.glDrawElements(GLES20.GL_TRIANGLES, facesList.size() * 3, GLES20.GL_UNSIGNED_SHORT, facesBuffer);
         //Log.d("ST", verticesList.size() + " " + colorsList.size() + " " + facesList.size());
-        Log.d("TT", vcounter + " " + ccounter + " " + fcounter);
+        //Log.d("TT", vcounter + " " + ccounter + " " + fcounter);
        // GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, fcounter * 3);
         //GLES20.glDisableVertexAttribArray(position);
 

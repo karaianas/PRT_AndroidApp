@@ -139,62 +139,21 @@ public class Skybox {
         GLES20.glGenTextures(1, texture, 0);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_CUBE_MAP,texture[0]);
 
-        Bitmap img = null;
-        img = BitmapFactory.decodeResource(mContext.getResources(), R.raw.right);
-        fcbuffer = ByteBuffer.allocateDirect(img.getHeight() * img.getWidth() * 4);
-
-        img.copyPixelsToBuffer(fcbuffer);
-        fcbuffer.position(0);
-        GLES20.glTexImage2D(GLES20.GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, GLES20.GL_RGBA,
-                img.getWidth(),img.getHeight() , 0,GLES20.GL_RGBA ,GLES20.GL_UNSIGNED_BYTE, fcbuffer);
-        fcbuffer = null;
-        img.recycle();
-
-        img = BitmapFactory.decodeResource(mContext.getResources(), R.raw.left);
-        fcbuffer = ByteBuffer.allocateDirect(img.getHeight() * img.getWidth() * 4);
-        img.copyPixelsToBuffer(fcbuffer);
-        fcbuffer.position(0);
-        GLES20.glTexImage2D(GLES20.GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, GLES20.GL_RGBA,
-                img.getWidth(),img.getHeight(), 0,GLES20.GL_RGBA ,GLES20.GL_UNSIGNED_BYTE, fcbuffer);
-        fcbuffer = null;
-        img.recycle();
-
-        img = BitmapFactory.decodeResource(mContext.getResources(), R.raw.top);
-        fcbuffer = ByteBuffer.allocateDirect(img.getHeight() * img.getWidth() * 4);
-        img.copyPixelsToBuffer(fcbuffer);
-        fcbuffer.position(0);
-        GLES20.glTexImage2D(GLES20.GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, GLES20.GL_RGBA,
-                img.getWidth(),img.getHeight(), 0,GLES20.GL_RGBA ,GLES20.GL_UNSIGNED_BYTE, fcbuffer);
-        fcbuffer = null;
-        img.recycle();
+        int [] imageId = {R.raw.right, R.raw.left, R.raw.top, R.raw.bottom, R.raw.far, R.raw.near};
 
 
-        img = BitmapFactory.decodeResource(mContext.getResources(), R.raw.bottom);
-        fcbuffer = ByteBuffer.allocateDirect(img.getHeight() * img.getWidth() * 4);
-        img.copyPixelsToBuffer(fcbuffer);
-        fcbuffer.position(0);
-        GLES20.glTexImage2D(GLES20.GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, GLES20.GL_RGBA,
-                img.getWidth(),img.getHeight(), 0,GLES20.GL_RGBA ,GLES20.GL_UNSIGNED_BYTE, fcbuffer);
-        fcbuffer = null;
-        img.recycle();
-
-        img = BitmapFactory.decodeResource(mContext.getResources(), R.raw.far);
-        fcbuffer = ByteBuffer.allocateDirect(img.getHeight() * img.getWidth() * 4);
-        img.copyPixelsToBuffer(fcbuffer);
-        fcbuffer.position(0);
-        GLES20.glTexImage2D(GLES20.GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, GLES20.GL_RGBA,
-                img.getWidth(),img.getHeight(), 0,GLES20.GL_RGBA ,GLES20.GL_UNSIGNED_BYTE, fcbuffer);
-        fcbuffer = null;
-        img.recycle();
-
-        img = BitmapFactory.decodeResource(mContext.getResources(), R.raw.near);
-        fcbuffer = ByteBuffer.allocateDirect(img.getHeight() * img.getWidth() * 4);
-        img.copyPixelsToBuffer(fcbuffer);
-        fcbuffer.position(0);
-        GLES20.glTexImage2D(GLES20.GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, GLES20.GL_RGBA,
-                img.getWidth(),img.getHeight(), 0,GLES20.GL_RGBA ,GLES20.GL_UNSIGNED_BYTE, fcbuffer);
-        fcbuffer = null;
-        img.recycle();
+        for(int i = 0; i < 6; i++)
+        {
+            Bitmap img = null;
+            img = BitmapFactory.decodeResource(mContext.getResources(),imageId[i]);
+            fcbuffer = ByteBuffer.allocateDirect(img.getHeight() * img.getWidth() * 4);
+            img.copyPixelsToBuffer(fcbuffer);
+            fcbuffer.position(0);
+            GLES20.glTexImage2D(GLES20.GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GLES20.GL_RGBA,
+                    img.getWidth(),img.getHeight() , 0,GLES20.GL_RGBA ,GLES20.GL_UNSIGNED_BYTE, fcbuffer);
+            fcbuffer = null;
+            img.recycle();
+        }
 
         GLES20.glGenerateMipmap(GLES20.GL_TEXTURE_CUBE_MAP);
         GLES20.glTexParameteri(GLES20.GL_TEXTURE_CUBE_MAP, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
