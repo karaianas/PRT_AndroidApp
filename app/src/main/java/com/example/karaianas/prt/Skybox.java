@@ -141,7 +141,6 @@ public class Skybox {
 
         int [] imageId = {R.raw.right, R.raw.left, R.raw.top, R.raw.bottom, R.raw.far, R.raw.near};
 
-
         for(int i = 0; i < 6; i++)
         {
             Bitmap img = null;

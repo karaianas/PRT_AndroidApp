@@ -14,6 +14,7 @@ import com.google.vr.sdk.base.GvrActivity;
 import com.google.vr.sdk.base.GvrView;
 import com.google.vr.sdk.base.HeadTransform;
 import com.google.vr.sdk.base.Viewport;
+import android.content.Context;
 
 import javax.microedition.khronos.egl.EGLConfig;
 
@@ -31,7 +32,7 @@ public class cGLRenderer extends GvrActivity implements GvrView.StereoRenderer{
     private float[] MV_skybox = new float[16];
     private float[] VP = new float[16];
     private float[] MVP_skybox = new float[16];
-    private float[] R = new float[16];
+    //private float[] R = new float[16];
 
     private float [] headRotation = new float[4];
     private float [] headView = new float[16];
@@ -66,9 +67,13 @@ public class cGLRenderer extends GvrActivity implements GvrView.StereoRenderer{
 
         GLES20.glDepthFunc(GLES20.GL_LEQUAL);
         mSkybox = new Skybox(mContext);
-        mObj = new Obj(mContext);
-        rangle = 0;
 
+        // Choose which model to draw;
+        // ultimately you load all of them at once and just change them on the fly
+        // model01 is wrong and model03 is too big to be rendered
+        int modelId = 2;
+        mObj = new Obj(mContext, modelId);
+        rangle = 0;
     }
 
     @Override

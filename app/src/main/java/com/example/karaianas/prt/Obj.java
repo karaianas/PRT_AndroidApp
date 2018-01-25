@@ -57,12 +57,32 @@ public class Obj {
     int vcounter = 0;
     int ccounter = 0;
 
-    public Obj(Context context)
+    public Obj(Context context, int modelId)
     {
         mContext = context;
 
+        int mId, cId, oId;
+        if(modelId == 0)
+        {
+            mId = R.raw.model01;
+            cId = R.raw.model01_coefficients;
+            oId = R.raw.model01_order;
+        }
+        else if(modelId == 1)
+        {
+            mId = R.raw.model02;
+            cId = R.raw.model02_coefficients;
+            oId = R.raw.model02_order;
+        }
+        else
+        {
+            mId = R.raw.model03;
+            cId = R.raw.model03_coeff;
+            oId = R.raw.model03_order;
+        }
+
         // Read in positions
-        InputStream is_pos = mContext.getResources().openRawResource(R.raw.model02);
+        InputStream is_pos = mContext.getResources().openRawResource(mId);
         Scanner scanner = new Scanner(is_pos);
 
         // Loop through all its lines
@@ -104,7 +124,7 @@ public class Obj {
         scanner.close();
 
         // Read in colors
-        InputStream is_color = mContext.getResources().openRawResource(R.raw.model02_coefficients);
+        InputStream is_color = mContext.getResources().openRawResource(cId);
         scanner = new Scanner(is_color);
 
         while (scanner.hasNextLine())
@@ -148,7 +168,7 @@ public class Obj {
         scanner.close();
 
         // Read in indices
-        InputStream is_ind = mContext.getResources().openRawResource(R.raw.model02_order);
+        InputStream is_ind = mContext.getResources().openRawResource(oId);
         scanner = new Scanner(is_ind);
 
         while (scanner.hasNextLine())
