@@ -32,7 +32,7 @@ public class cGLRenderer extends GvrActivity implements GvrView.StereoRenderer{
     private float[] MV_skybox = new float[16];
     private float[] VP = new float[16];
     private float[] MVP_skybox = new float[16];
-    //private float[] R = new float[16];
+    private float[] R = new float[16];
 
     private float [] headRotation = new float[4];
     private float [] headView = new float[16];
@@ -71,7 +71,7 @@ public class cGLRenderer extends GvrActivity implements GvrView.StereoRenderer{
         // Choose which model to draw;
         // ultimately you load all of them at once and just change them on the fly
         // model01 is wrong and model03 is too big to be rendered
-        int modelId = 2;
+        int modelId = 1;
         mObj = new Obj(mContext, modelId);
         rangle = 0;
     }
@@ -104,12 +104,13 @@ public class cGLRenderer extends GvrActivity implements GvrView.StereoRenderer{
 
         mSkybox.draw(M_skybox, V, perspective);
         mObj.draw(M_object, V, perspective);
+        mObj.rotateCoeff(1.0f, 2.0f, 3.0f);
 
         // Rotating the skybox on XY-plane
-//        rangle = 0.2f;
-//        Matrix.setRotateM(R, 0, rangle, 0.0f, 1.0f, 0.0f);
+        rangle = 0.2f;
+        Matrix.setRotateM(R, 0, rangle, 0.0f, 1.0f, 0.0f);
 //        Matrix.multiplyMM(M_skybox, 0, R, 0, M_skybox, 0);
-//        Matrix.multiplyMM(M_object, 0, R, 0, M_object, 0);
+        Matrix.multiplyMM(M_object, 0, R, 0, M_object, 0);
     }
 
     @Override

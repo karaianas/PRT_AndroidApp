@@ -41,6 +41,7 @@ public class Obj {
     private int mIndHandle;
     private int mMVHandle;
     private int mMVPHandle;
+    private int mLightCoeffHandle;
 
     // Light coefficients
     float [] L00 = {0.79f, 0.44f, 0.54f};
@@ -52,6 +53,7 @@ public class Obj {
     float [] L20 = {-0.16f, -0.09f, -0.15f};
     float [] L21 = {0.56f, 0.21f, 0.14f};
     float [] L22 = {0.21f, -0.05f, -0.30f};
+
 
     int fcounter = 0;
     int vcounter = 0;
@@ -147,23 +149,39 @@ public class Obj {
             String v9 = m.group(9);
 
             //Log.i("TEST", v1 + " " + v9 + " " + v3);
+//            float val_r =  (Float.parseFloat(v1) *L00[0] +Float.parseFloat(v2) * L1_1[0] + Float.parseFloat(v3) *L10[0] +
+//                    Float.parseFloat(v4) *L11[0] + Float.parseFloat(v5) *L2_2[0] + Float.parseFloat(v6) *L2_1[0] +
+//                    Float.parseFloat(v7) *L20[0] + Float.parseFloat(v8) *L21[0] + Float.parseFloat(v9) *L22[0]);
+//
+//            float val_g =  (Float.parseFloat(v1) *L00[1] +Float.parseFloat(v2) * L1_1[1] + Float.parseFloat(v3) *L10[1] +
+//                    Float.parseFloat(v4) *L11[1] + Float.parseFloat(v5) *L2_2[1] + Float.parseFloat(v6) *L2_1[1] +
+//                    Float.parseFloat(v7) *L20[1] + Float.parseFloat(v8) *L21[1] + Float.parseFloat(v9) *L22[1]);
+//
+//            float val_b =  (Float.parseFloat(v1) *L00[2] +Float.parseFloat(v2) * L1_1[2] + Float.parseFloat(v3) *L10[2] +
+//                    Float.parseFloat(v4) *L11[2] + Float.parseFloat(v5) *L2_2[2] + Float.parseFloat(v6) *L2_1[2] +
+//                    Float.parseFloat(v7) *L20[2] + Float.parseFloat(v8) *L21[2] + Float.parseFloat(v9) *L22[2]);
+
             float val_r =  (Float.parseFloat(v1) *L00[0] +Float.parseFloat(v2) * L1_1[0] + Float.parseFloat(v3) *L10[0] +
-                    Float.parseFloat(v4) *L11[0] + Float.parseFloat(v5) *L2_2[0] + Float.parseFloat(v6) *L2_1[0] +
-                    Float.parseFloat(v7) *L20[0] + Float.parseFloat(v8) *L21[0] + Float.parseFloat(v9) *L22[0]);
+                    Float.parseFloat(v4) *L11[0]);
 
             float val_g =  (Float.parseFloat(v1) *L00[1] +Float.parseFloat(v2) * L1_1[1] + Float.parseFloat(v3) *L10[1] +
-                    Float.parseFloat(v4) *L11[1] + Float.parseFloat(v5) *L2_2[1] + Float.parseFloat(v6) *L2_1[1] +
-                    Float.parseFloat(v7) *L20[1] + Float.parseFloat(v8) *L21[1] + Float.parseFloat(v9) *L22[1]);
+                    Float.parseFloat(v4) *L11[1]);
 
             float val_b =  (Float.parseFloat(v1) *L00[2] +Float.parseFloat(v2) * L1_1[2] + Float.parseFloat(v3) *L10[2] +
-                    Float.parseFloat(v4) *L11[2] + Float.parseFloat(v5) *L2_2[2] + Float.parseFloat(v6) *L2_1[2] +
-                    Float.parseFloat(v7) *L20[2] + Float.parseFloat(v8) *L21[2] + Float.parseFloat(v9) *L22[2]);
+                    Float.parseFloat(v4) *L11[2]);
+
+            float test = Float.parseFloat("1.200");
+
+//            v1 = String.valueOf(Float.valueOf(v1));
+//            v2 = String.valueOf(Float.valueOf(v2));
+//            v3 = String.valueOf(Float.valueOf(v3));
+//            colorsList.add(v1 + " " + v2 + " " + v3);
 
 //            float val_r = 1.0f;
 //            float val_g = 1.0f;
 //            float val_b = 1.0f;
 
-            colorsList.add(Float.toString(val_r) + " " + Float.toString(val_g) + " " + Float.toString(val_b));
+            colorsList.add(Float.toString(val_r) + " " + Float.toString(val_g) + " " + Float.toString(val_b) + " " + Float.toString(test));
         }
         scanner.close();
 
@@ -192,7 +210,8 @@ public class Obj {
         verticesBuffer = buffer1.asFloatBuffer();
 
         // Create buffer for colors
-        ByteBuffer buffer2 = ByteBuffer.allocateDirect(colorsList.size() * 3 * 4);
+        //ByteBuffer buffer2 = ByteBuffer.allocateDirect(colorsList.size() * 3 * 4);
+        ByteBuffer buffer2 = ByteBuffer.allocateDirect(colorsList.size() * 4 * 4);
         buffer2.order(ByteOrder.nativeOrder());
         colorsBuffer = buffer2.asFloatBuffer();
 
@@ -230,11 +249,15 @@ public class Obj {
             float y = Float.parseFloat(coords[1]);
             float z = Float.parseFloat(coords[2]);
 
+            float t = Float.parseFloat(coords[3]);
+
             //Log.d("WTH", ccounter + ":" + x + " " + y + " " + z);
 
             colorsBuffer.put(x);
             colorsBuffer.put(y);
             colorsBuffer.put(z);
+
+            colorsBuffer.put(t);
 
             ccounter++;
         }
@@ -308,6 +331,29 @@ public class Obj {
         //facesIdx = buffers[2];
     }
 
+    // *** Note that this is only for up to band 2
+    public void rotateCoeff(float a, float b, float r)
+    {
+        float cosa = (float)Math.cos(a);
+        float sina = (float)Math.sin(a);
+        float cosb = (float)Math.cos(b);
+        float sinb = (float)Math.sin(b);
+        float cosr = (float)Math.cos(r);
+        float sinr = (float)Math.sin(r);
+
+        float [] R1 = {cosa * cosr - sina * sinr * cosb,
+                sina * sinb, cosa * sinr + sina * cosr * sinb};
+        float [] R2 = {sinr * sinb, cosb, -cosr * sinb};
+        float [] R3 = {-cosa * sinr * cosb - sina * cosr,
+                cosa * sinb, cosa * cosr * cosb - sina * sinr};
+
+    }
+
+    private float dotProduct(float [] x, float [] y)
+    {
+        return x[0]*y[0] + x[1]*y[1] + x[2]*y[2];
+    }
+
     public void draw(float[] M, float[] V, float[] P)
     {
         GLES20.glEnable(GLES20.GL_CULL_FACE);
@@ -319,6 +365,7 @@ public class Obj {
         mColorHandle = GLES20.glGetAttribLocation(program, "a_color");
         mMVPHandle = GLES20.glGetUniformLocation(program, "u_MVP");
         //mMVHandle = GLES20.glGetUniformLocation(program, "u_MV");
+        //mLightCoeffHandle = GLES20.glGetUniformLocation(program, "u_lightC");
 
         // Bind vertices
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, positionIdx);
@@ -329,7 +376,8 @@ public class Obj {
         // Bind colors
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, colorIdx);
         GLES20.glEnableVertexAttribArray(mColorHandle);
-        GLES20.glVertexAttribPointer(mColorHandle, 3, GLES20.GL_FLOAT, false, 0, 0);
+        //GLES20.glVertexAttribPointer(mColorHandle, 3, GLES20.GL_FLOAT, false, 0, 0);
+        GLES20.glVertexAttribPointer(mColorHandle, 4, GLES20.GL_FLOAT, false, 0, 0);
 //        //GLES20.glDisableVertexAttribArray(colorAttribute);
 
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
@@ -340,14 +388,18 @@ public class Obj {
         Matrix.multiplyMM(temp, 0, P, 0, temp, 0);
         GLES20.glUniformMatrix4fv(mMVPHandle, 1, false, temp, 0);
 
+        // test-----
+        float lights[] = {1.0f, 0.0f};
+        //GLES20.glUniform2fv(mLightCoeffHandle, 1, lights, 0);
+
         // Draw
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
         //GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, facesIdx);
+//        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, verticesList.size());
         GLES20.glDrawElements(GLES20.GL_TRIANGLES, facesList.size() * 3, GLES20.GL_UNSIGNED_SHORT, facesBuffer);
         //Log.d("ST", verticesList.size() + " " + colorsList.size() + " " + facesList.size());
         //Log.d("TT", vcounter + " " + ccounter + " " + fcounter);
        // GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, fcounter * 3);
         //GLES20.glDisableVertexAttribArray(position);
-
     }
 }
